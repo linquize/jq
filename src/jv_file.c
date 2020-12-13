@@ -5,9 +5,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifdef _MSC_VER
+#undef _CRT_INTERNAL_NONSTDC_NAMES
+#define _CRT_INTERNAL_NONSTDC_NAMES 1
+#include <io.h>
+#else
 #include <unistd.h>
+#endif
 #include "jv.h"
 #include "jv_unicode.h"
+#ifndef S_ISDIR
+#define S_ISDIR(mode)  (((mode) & S_IFMT) == S_IFDIR)
+#endif
 
 jv jv_load_file(const char* filename, int raw) {
   struct stat sb;
@@ -42,7 +51,7 @@ jv jv_load_file(const char* filename, int raw) {
   // To avoid mangling UTF-8 multi-byte sequences that cross the end of our read
   // buffer, we need to be able to read the remainder of a sequence and add that
   // before appending.
-  const int max_utf8_len = 4;
+#define max_utf8_len 4
   char buf[4096+max_utf8_len];
   while (!feof(file) && !ferror(file)) {
     size_t n = fread(buf, 1, sizeof(buf)-max_utf8_len, file);

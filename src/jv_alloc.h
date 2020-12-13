@@ -22,6 +22,11 @@ void* jv_mem_calloc_unguarded(size_t, size_t);
 char* jv_mem_strdup(const char *);
 char* jv_mem_strdup_unguarded(const char *);
 void jv_mem_free(void*);
-__attribute__((warn_unused_result)) void* jv_mem_realloc(void*, size_t);
+#ifdef __GNUC__
+__attribute__((warn_unused_result))
+#elif defined(_MSC_VER) && (_MSC_VER >= 1700)
+_Check_return_
+#endif
+void* jv_mem_realloc(void*, size_t);
 
 #endif

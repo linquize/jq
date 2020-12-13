@@ -7,7 +7,9 @@
 # define _XPG6
 # define __EXTENSIONS__
 #endif
+#ifndef _MSC_VER
 #include <sys/time.h>
+#endif
 #include <stdlib.h>
 #include <stddef.h>
 #ifdef HAVE_ALLOCA_H
@@ -1204,6 +1206,10 @@ static jv tm2jv(struct tm *tm) {
 static time_t my_timegm(struct tm *tm) {
 #ifdef HAVE_TIMEGM
   return timegm(tm);
+#elif defined(WIN32) /* HAVE_TIMEGM */
+    struct tm tm1;
+    memcpy(&tm1, tm, sizeof(struct tm));
+    return _mkgmtime(&tm1);
 #else /* HAVE_TIMEGM */
   char *tz;
 

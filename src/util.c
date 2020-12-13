@@ -10,7 +10,9 @@
 #include <fcntl.h>
 #include <limits.h>
 #include <string.h>
+#ifndef _MSC_VER
 #include <unistd.h>
+#endif
 #include <stdlib.h>
 #include <stddef.h>
 #ifdef HAVE_ALLOCA_H
@@ -46,7 +48,8 @@ void *alloca (size_t);
 #include "jv_alloc.h"
 
 #ifdef WIN32
-FILE *fopen(const char *fname, const char *mode) {
+#define fopen fopen_win32
+FILE * fopen_win32(const char *fname, const char *mode) {
   size_t sz = sizeof(wchar_t) * MultiByteToWideChar(CP_UTF8, 0, fname, -1, NULL, 0);
   wchar_t *wfname = alloca(sz + 2); // +2 is not needed, but just in case
   MultiByteToWideChar(CP_UTF8, 0, fname, -1, wfname, sz);
@@ -135,6 +138,8 @@ jv jq_realpath(jv path) {
   char *buf = NULL;
 #ifdef _PC_PATH_MAX
   path_max = pathconf(jv_string_value(path),_PC_PATH_MAX);
+#elif defined(MAX_PATH)
+  path_max = MAX_PATH;
 #else
   path_max = PATH_MAX;
 #endif

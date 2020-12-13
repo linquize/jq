@@ -1,11 +1,36 @@
 #include <assert.h>
 #include <ctype.h>
 #include <errno.h>
+#ifndef _MSC_VER
 #include <libgen.h>
+#else
+#include <string.h>
+static char *dirname(char *p) {
+	char *f = strrchr(p, '/');
+	char *b = strrchr(p, '\\');
+	char *s = (f > b) ? f : b;
+	if (s)
+		*s = '\0';
+	else {
+		p[0] = '.';
+		p[1] = '\0';
+	}
+	return p;
+}
+
+#ifndef STDIN_FILENO
+#define STDIN_FILENO 0
+#endif
+#ifndef STDOUT_FILENO
+#define STDOUT_FILENO 1
+#endif
+#endif
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#ifndef _MSC_VER
 #include <unistd.h>
+#endif
 
 #ifdef WIN32
 #include <windows.h>
@@ -32,6 +57,10 @@
 #include "jv_alloc.h"
 #include "util.h"
 #include "src/version.h"
+#ifdef _MSC_VER
+#include <malloc.h>
+#define alloca _alloca
+#endif
 
 int jq_testsuite(jv lib_dirs, int verbose, int argc, char* argv[]);
 

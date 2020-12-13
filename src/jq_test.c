@@ -4,6 +4,9 @@
 #include <stdlib.h>
 #include "jv.h"
 #include "jq.h"
+#ifdef WIN32
+#define fopen fopen_win32
+#endif
 
 static void jv_test();
 static void run_jq_tests(jv, int, FILE *);

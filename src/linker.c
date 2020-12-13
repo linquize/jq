@@ -6,7 +6,22 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <sys/stat.h>
+#ifndef _MSC_VER
 #include <libgen.h>
+#else
+static char *dirname(char *p) {
+	char *f = strrchr(p, '/');
+	char *b = strrchr(p, '\\');
+	char *s = (f > b) ? f : b;
+	if (s)
+		*s = '\0';
+	else {
+		p[0] = '.';
+		p[1] = '\0';
+	}
+	return p;
+}
+#endif
 
 #ifdef WIN32
 #include <shlwapi.h>
