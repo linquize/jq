@@ -249,8 +249,8 @@ int main(int argc, char* argv[]) {
 #ifdef WIN32
   fflush(stdout);
   fflush(stderr);
-  _setmode(fileno(stdout), _O_TEXT | _O_U8TEXT);
-  _setmode(fileno(stderr), _O_TEXT | _O_U8TEXT);
+  _setmode(fileno(stdout), _O_U8TEXT);
+  _setmode(fileno(stderr), _O_U8TEXT);
   int wargc;
   wchar_t **wargv = CommandLineToArgvW(GetCommandLineW(), &wargc);
   assert(wargc == argc);
