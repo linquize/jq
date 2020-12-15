@@ -1,0 +1,6 @@
+file(READ "${IN_FILE}" STR)
+string(REPLACE "\\" "\\\\" STR "${STR}")
+string(REPLACE "\"" "\\\"" STR "${STR}")
+string(REPLACE "\n" "\\n\"\n\"" STR "${STR}")
+set(STR "\"${STR}\"")
+file(WRITE "${OUT_FILE}" "${STR}")
