@@ -1,0 +1,7 @@
+{
+    "name": "c++-focal",
+    "image": "mcr.microsoft.com/vscode/devcontainers/cpp:focal",
+    "postCreateCommand": "sudo apt-get update && sudo apt-get install -y autoconf automake libtool flex bison",
+    "extensions": ["ms-vscode.cpptools", "eamodio.gitlens", "mhutchie.git-graph"],
+    "containerUser": "vscode"
+}
